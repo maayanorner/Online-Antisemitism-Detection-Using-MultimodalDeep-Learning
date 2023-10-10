@@ -105,49 +105,49 @@ def create_sets(new_data_w_index, encoded_labels, train_index, test_index, max_l
             test_data, metric_test: test_data is the data which will be used for testing. metric_test contains test labels.
     '''
 
-	train_data, test_data = new_data_w_index[train_index], new_data_w_index[test_index]
-	train_label, test_label = encoded_labels[train_index], encoded_labels[test_index]
+    train_data, test_data = new_data_w_index[train_index], new_data_w_index[test_index]
+    train_label, test_label = encoded_labels[train_index], encoded_labels[test_index]
 
-	train_data, validation_data, train_label, validation_label = train_test_split(train_data, train_label, stratify=train_label, test_size=0.2, random_state=42)
+    train_data, validation_data, train_label, validation_label = train_test_split(train_data, train_label, stratify=train_label, test_size=0.2, random_state=42)
 
-	train_label = to_categorical(train_label)
-	validation_label = to_categorical(validation_label)
+    train_label = to_categorical(train_label)
+    validation_label = to_categorical(validation_label)
 
-	metric_test = np.copy(test_label)
-	test_label = to_categorical(test_label)
+    metric_test = np.copy(test_label)
+    test_label = to_categorical(test_label)
 
-	train_img_indices = np.stack(train_data[:,0])
-	print(train_img_indices)
-	train_data = np.stack(train_data[:,1])
+    train_img_indices = np.stack(train_data[:,0])
+    print(train_img_indices)
+    train_data = np.stack(train_data[:,1])
 
-	validation_img_indices = np.stack(validation_data[:,0])
-	validation_data = np.stack(validation_data[:,1])
+    validation_img_indices = np.stack(validation_data[:,0])
+    validation_data = np.stack(validation_data[:,1])
 
-	test_img_indices = np.stack(test_data[:,0])
-	test_data = np.stack(test_data[:,1])
+    test_img_indices = np.stack(test_data[:,0])
+    test_data = np.stack(test_data[:,1])
 
-	train_text_input_ids = np.copy(train_data[:,0:max_len])
-	validation_text_input_ids = np.copy(validation_data[:,0:max_len])
-	test_text_input_ids = np.copy(test_data[:,0:max_len])
+    train_text_input_ids = np.copy(train_data[:,0:max_len])
+    validation_text_input_ids = np.copy(validation_data[:,0:max_len])
+    test_text_input_ids = np.copy(test_data[:,0:max_len])
 
-	train_text_attention_mask = np.copy(train_data[:,max_len:2*max_len])
-	validation_text_attention_mask = np.copy(validation_data[:,max_len:2*max_len])
-	test_text_attention_mask = np.copy(test_data[:,max_len:2*max_len])
+    train_text_attention_mask = np.copy(train_data[:,max_len:2*max_len])
+    validation_text_attention_mask = np.copy(validation_data[:,max_len:2*max_len])
+    test_text_attention_mask = np.copy(test_data[:,max_len:2*max_len])
 
-	if txt_flag == 0:
-	    train_text_token_ids = np.copy(train_data[:,2*max_len:3*max_len])
-	    validation_text_token_ids = np.copy(validation_data[:,2*max_len:3*max_len])
-	    test_text_token_ids = np.copy(test_data[:,2*max_len:3*max_len])
-	else:
-	    train_text_token_ids = None
-	    validation_text_token_ids = None
-	    test_text_token_ids = None
+    if txt_flag == 0:
+        train_text_token_ids = np.copy(train_data[:,2*max_len:3*max_len])
+        validation_text_token_ids = np.copy(validation_data[:,2*max_len:3*max_len])
+        test_text_token_ids = np.copy(test_data[:,2*max_len:3*max_len])
+    else:
+        train_text_token_ids = None
+        validation_text_token_ids = None
+        test_text_token_ids = None
 
-	print("Creating Datasets...")
-	#         print(train_text_input_ids.shape, train_text_attention_mask.shape, train_text_token_ids.shape)
-	training_set = Dataset(train_text_input_ids, train_text_attention_mask, train_text_token_ids, train_img_indices, train_label, "train")
-	test_set = Dataset(test_text_input_ids, test_text_attention_mask, test_text_token_ids, test_img_indices, test_label, "test")
-	validation_set = Dataset(validation_text_input_ids, validation_text_attention_mask, validation_text_token_ids, validation_img_indices, validation_label, "validation")
+    print("Creating Datasets...")
+    #         print(train_text_input_ids.shape, train_text_attention_mask.shape, train_text_token_ids.shape)
+    training_set = Dataset(train_text_input_ids, train_text_attention_mask, train_text_token_ids, train_img_indices, train_label, "train")
+    test_set = Dataset(test_text_input_ids, test_text_attention_mask, test_text_token_ids, test_img_indices, test_label, "test")
+    validation_set = Dataset(validation_text_input_ids, validation_text_attention_mask, validation_text_token_ids, validation_img_indices, validation_label, "validation")
 
 
-	return training_set, validation_set, test_set, test_data, metric_test
+    return training_set, validation_set, test_set, test_data, metric_test
